@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/parent")
+@RequestMapping("/child")
 public class helloworld {
 
     @RequestMapping("helloworld")

@@ -1,5 +1,7 @@
+#https://blog.csdn.net/weixin_38569499/article/details/91456988
+
 #一、maven项目的目录结构
-目录	目的
+目录	
 ${basedir}	存放pom.xml和所有的子目录
 
 ${basedir}/src/main/java	项目的java源代码
@@ -27,7 +29,7 @@ Test.java	Maven只会自动运行符合该命名规则的测试类
 /.m2/repository	``aven默认的本地仓库目录位置
 
 #二、根元素和必要配置``
-``````
+```
 <project xmlns = "http://maven.apache.org/POM/4.0.0"
     xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0
@@ -48,14 +50,210 @@ Test.java	Maven只会自动运行符合该命名规则的测试类
     <!--项目产生的构件类型，包括jar、war、ear、pom等 -->
     <packaging>jar</packaging>
 </project>
-```````
- project是pom文件的根元素，project下有modelVersion、groupId、artifactId、version、packaging等重要的元素。其中，groupId、artifactId、version三个元素用来定义一个项目的坐标，也就是说，一个maven仓库中，完全相同的一组groupId、artifactId、version，只能有一个项目。
+```
 
-project：整个pom配置文件的根元素，所有的配置都是写在project元素里面的；
-modelVersion：指定了当前POM模型的版本，对于Maven2及Maven 3来说，它只能是4.0.0；
-groupId：这是项目组的标识。它在一个组织或者项目中通常是唯一的。
-artifactId：这是项目的标识，通常是工程的名称。它在一个项目组（group）下是唯一的。
-version：这是项目的版本号，用来区分同一个artifact的不同版本。
-packaging：这是项目产生的构件类型，即项目通过maven打包的输出文件的后缀名，包括jar、war、ear、pom等。 
+#三、父项目和parent元素
+```
 
-三、父项目和parent元素
+    <!--父项目的坐标，坐标包括group ID，artifact ID和version。 -->
+    <!--如果项目中没有规定某个元素的值，那么父项目中的对应值即为项目的默认值 -->
+    <parent>
+ 
+        <!--被继承的父项目的构件标识符 -->
+        <artifactId>com.companyname.project-group</artifactId>
+        <!--被继承的父项目的全球唯一标识符 -->
+        <groupId>base-project</groupId>
+        <!--被继承的父项目的版本 -->
+        <version>1.0.1-RELEASE</version>
+ 
+        <!-- 父项目的pom.xml文件的相对路径,默认值是../pom.xml。 -->
+        <!-- 寻找父项目的pom：构建当前项目的地方--)relativePath指定的位置--)本地仓库--)远程仓库 -->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+```
+
+#四、项目构建需要的信息
+```
+  <!--构建项目需要的信息 -->
+    <build>
+        <!--------------------- 路径管理（在遵循约定大于配置原则下，不需要配置） --------------------->
+        <!--项目源码目录，当构建项目的时候，构建系统会编译目录里的源码。该路径是相对于pom.xml的相对路径。 -->
+        <sourceDirectory />
+        <!--该元素设置了项目单元测试使用的源码目录。该路径是相对于pom.xml的相对路径 -->
+        <testSourceDirectory />
+        <!--被编译过的应用程序class文件存放的目录。 -->
+        <outputDirectory />
+        <!--被编译过的测试class文件存放的目录。 -->
+        <testOutputDirectory />        
+        <!--项目脚本源码目录，该目录下的内容，会直接被拷贝到输出目录，因为脚本是被解释的，而不是被编译的 -->
+        <scriptSourceDirectory />
+ 
+        <!--------------------- 资源管理 --------------------->
+        <!--这个元素描述了项目相关的所有资源路径列表，例如和项目相关的属性文件，这些资源被包含在最终的打包文件里。 -->
+        <resources>
+            <!--这个元素描述了项目相关或测试相关的所有资源路径 -->
+            <resource>
+                <!-- 描述了资源的目标输出路径。该路径是相对于target/classes的路径 -->
+                <!-- 如果是想要把资源直接放在target/classes下，不需要配置该元素 -->
+                <targetPath />
+                <!--是否使用参数值代替参数名。参数值取自文件里配置的属性，文件在filters元素里列出。 -->
+                <filtering />
+                <!--描述存放资源的目录，该路径相对POM路径 -->
+                <directory />
+                <!--包含的模式列表，例如**/*.xml，只有符合条件的资源文件才会在打包的时候被放入到输出路径中 -->
+                <includes />
+                <!--排除的模式列表，例如**/*.xml，符合的资源文件不会在打包的时候会被过滤掉 -->
+                <excludes />
+            </resource>
+        </resources>
+        <!--这个元素描述了单元测试相关的所有资源路径，例如和单元测试相关的属性文件。 -->
+        <testResources>
+            <!--这个元素描述了测试相关的所有资源路径，子元素说明参考build/resources/resource元素的说明 -->
+            <testResource>
+                <targetPath />
+                <filtering />
+                <directory />
+                <includes />
+                <excludes />
+            </testResource>
+        </testResources>
+ 
+        <!--------------------- 插件管理 --------------------->
+        <!-- 子项目可以引用的默认插件信息。pluginManagement中的插件直到被引用时才会被解析或绑定到生命周期 -->
+        <!-- 这里只是做了声明，并没有真正的引入。给定插件的任何本地配置都会覆盖这里的配置-->
+        <pluginManagement>
+            <!-- 可使用的插件列表 -->
+            <plugins>
+                <!--plugin元素包含描述插件所需要的信息。 -->
+                <plugin>
+                    <!--插件在仓库里的group ID -->
+                    <groupId />
+                    <!--插件在仓库里的artifact ID -->
+                    <artifactId />
+                    <!--被使用的插件的版本（或版本范围） -->
+                    <version />
+                    <!-- 是否从该插件下载Maven扩展(例如打包和类型处理器) -->
+                    <!-- 由于性能原因，只有在真需要下载时，该元素才被设置成enabled -->
+                    <extensions />
+                    <!--在构建生命周期中执行一组目标的配置。每个目标可能有不同的配置。 -->
+                    <executions>
+                        <!--execution元素包含了插件执行需要的信息 -->
+                        <execution>
+                            <!--执行目标的标识符，用于标识构建过程中的目标，或者匹配继承过程中需要合并的执行目标 -->
+                            <id />
+                            <!--绑定了目标的构建生命周期阶段，如果省略，目标会被绑定到源数据里配置的默认阶段 -->
+                            <phase />
+                            <!--配置的执行目标 -->
+                            <goals />
+                            <!--配置是否被传播到子POM -->
+                            <inherited />
+                            <!--作为DOM对象的配置 -->
+                            <configuration />
+                        </execution>
+                    </executions>
+                    <!--项目引入插件所需要的额外依赖 -->
+                    <dependencies>
+                        <!--参见dependencies/dependency元素 -->
+                        <dependency>
+                            ......
+                        </dependency>
+                    </dependencies>
+                    <!--任何配置是否被传播到子项目 -->
+                    <inherited />
+                    <!--作为DOM对象的配置 -->
+                    <configuration />
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <!--使用的插件列表 -->
+        <plugins>
+            <!--参见build/pluginManagement/plugins/plugin元素 -->
+            <plugin>
+                <groupId />
+                <artifactId />
+                <version />
+                <extensions />
+                <executions>
+                    <execution>
+                        <id />
+                        <phase />
+                        <goals />
+                        <inherited />
+                        <configuration />
+                    </execution>
+                </executions>
+                <dependencies>
+                    <!--参见dependencies/dependency元素 -->
+                    <dependency>
+                        ......
+                    </dependency>
+                </dependencies>
+                <goals />
+                <inherited />
+                <configuration />
+            </plugin>
+        </plugins>
+ 
+        <!--------------------- 构建扩展 --------------------->
+        <!--使用来自其他项目的一系列构建扩展 -->
+        <extensions>
+            <!--每个extension描述一个会使用到其构建扩展的一个项目，extension的子元素是项目的坐标 -->
+            <extension>
+                <!--项目坐标三元素：groupId + artifactId + version -->
+                <groupId />
+                <artifactId />
+                <version />
+            </extension>
+        </extensions>
+ 
+        <!--------------------- 其他配置 --------------------->
+        <!--当项目没有规定目标（Maven2 叫做阶段）时的默认值 -->
+        <defaultGoal />
+        <!--构建产生的所有文件存放的目录 -->
+        <directory />
+        <!--产生的构件的文件名，默认值是${artifactId}-${version}。 -->
+        <finalName />
+        <!--当filtering开关打开时，使用到的过滤器属性文件列表 -->
+        <filters />
+    </build>
+```
+#五、项目依赖相关信息
+
+#六、生成文档相关的元素
+```
+    <!--项目的名称, Maven生成文档使用 -->
+    <name>project-maven</name>
+    
+    <!--项目主页的URL, Maven生成文档使用 -->
+    <url>http://123.a.b/nsnxs</url>
+    
+    <!-- 项目的详细描述, Maven生成文档使用。当这个元素能够用HTML格式描述时，不鼓励使用纯文本描述 -->
+    <!--如果你需要修改生成的web站点的索引页面，你应该修改你自己的索引页文件，而不是调整这里的文档 -->
+<description>Description of this maven project</description>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
