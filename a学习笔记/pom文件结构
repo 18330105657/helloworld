@@ -1,0 +1,61 @@
+#一、maven项目的目录结构
+目录	目的
+${basedir}	存放pom.xml和所有的子目录
+
+${basedir}/src/main/java	项目的java源代码
+
+${basedir}/src/main/resources	项目的资源，比如说property文件，springmvc.xml
+
+${basedir}/src/test/java	项目的测试类，比如说Junit代码
+
+${basedir}/src/test/resources	测试用的资源
+
+${basedir}/src/main/scripts	项目脚本源码的目录
+
+${basedir}/src/main/webapp/WEB-INF`web应用文件目录，web项目的信息，比如存放web.xml、本地图片、jsp视图页面
+
+${basedir}/target	打包输出目录
+
+${basedir}/target/classes	编译输出目录
+
+${basedir}/target/site	生成文档的目录，可以通过index.html查看项目的文档
+
+${basedir}/target/test-classes	测试编译输出目录
+
+Test.java	Maven只会自动运行符合该命名规则的测试类
+
+/.m2/repository	``aven默认的本地仓库目录位置
+
+#二、根元素和必要配置``
+``````
+<project xmlns = "http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0
+    http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ 
+    <!-- 模型版本 -->
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 公司或者组织的唯一标志，也是打包成jar包路径的依据 -->
+    <!-- 例如com.companyname.project-group，maven打包jar包的路径：/com/companyname/project-group -->
+    <groupId>com.companyname.project-group</groupId>
+ 
+    <!-- 项目的唯一ID，一个groupId下面可能多个项目，就是靠artifactId来区分的 -->
+    <artifactId>project</artifactId>
+ 
+    <!-- 项目当前版本，格式为:主版本.次版本.增量版本-限定版本号 -->
+    <version>1.0</version>
+ 
+    <!--项目产生的构件类型，包括jar、war、ear、pom等 -->
+    <packaging>jar</packaging>
+</project>
+```````
+ project是pom文件的根元素，project下有modelVersion、groupId、artifactId、version、packaging等重要的元素。其中，groupId、artifactId、version三个元素用来定义一个项目的坐标，也就是说，一个maven仓库中，完全相同的一组groupId、artifactId、version，只能有一个项目。
+
+project：整个pom配置文件的根元素，所有的配置都是写在project元素里面的；
+modelVersion：指定了当前POM模型的版本，对于Maven2及Maven 3来说，它只能是4.0.0；
+groupId：这是项目组的标识。它在一个组织或者项目中通常是唯一的。
+artifactId：这是项目的标识，通常是工程的名称。它在一个项目组（group）下是唯一的。
+version：这是项目的版本号，用来区分同一个artifact的不同版本。
+packaging：这是项目产生的构件类型，即项目通过maven打包的输出文件的后缀名，包括jar、war、ear、pom等。 
+
+三、父项目和parent元素
