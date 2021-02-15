@@ -1,0 +1,6 @@
+server:
+  servlet:
+    context-path: /child02
+  port: 8082
+  tomcat:
+    uri-encoding: utf-8
