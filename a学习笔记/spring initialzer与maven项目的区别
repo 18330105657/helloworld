@@ -1,0 +1,7 @@
+IDEA使用Spring Initializr与Maven创建项目的区别
+#https://blog.csdn.net/weixin_44259720/article/details/105482044
+
+首先说明下，两者都可以创建Maven项目，本质上没多大区别，只在pom依赖的引入时间上有所不同。
+#区别
+使用“spring initializr”创建项目，可以直观的手动勾选依赖，项目创建成功后pom.xml中会自带依赖（如下图）；
+使用“Maven”创建项目，需要自己在pom.xml文件夹中添加依赖（适合网络环境差的情况下使用）。
