@@ -1,6 +1,0 @@
-server:
-  servlet:
-    context-path: /parent
-  port: 8080
-  tomcat:
-    uri-encoding: utf-8
